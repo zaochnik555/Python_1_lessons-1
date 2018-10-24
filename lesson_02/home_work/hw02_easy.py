@@ -13,10 +13,41 @@
 
 # Подсказка: воспользоваться методом .format()
 
+print("Задача 1")
+fruit_list=["яблоко", "банан", "киви", "арбуз"]
+
+for x in range(0, len(fruit_list)):
+    print('%d.'%(x+1), '{:>6}'.format(fruit_list[x].strip()))
+
+
+
+
+
+
 
 # Задача-2:
 # Даны два произвольные списка.
 # Удалите из первого списка элементы, присутствующие во втором списке и выведите результат.
+print("\nЗадача 2")
+list1=[i**2 for i in range(10)]
+list2=[i**2 for i in range(0,20,2)]
+
+print('Список 1:',list1)
+print('Список 2:',list2)
+i=0
+while i<len(list1):
+    if list1[i] in list2:
+        list1.pop(i)
+        i-=1
+    i+=1
+print('Решение 1:',list1)
+
+
+#другое решение
+list1=[i**2 for i in range(10)]
+list2=[i**2 for i in range(0,20,2)]
+print('Решение 2:',list(set(list1) - set(list2)))
+
 
 
 # Задача-3:
@@ -24,4 +55,13 @@
 # Получите НОВЫЙ список из элементов исходного, выполнив следующие условия:
 # если элемент кратен двум, то разделить его на 4, если не кратен, то умножить на два.
 # и выведите результат
-
+print("\nЗадача 3")
+list4=[i**2 for i in range(0,25,3)]
+list5=[]
+print('Исходный список:',list4)
+for el in list4:
+    if el%2==0:
+        list5.append(el/4)
+    else:
+        list5.append(el*2)
+print('Результат:',list5)
