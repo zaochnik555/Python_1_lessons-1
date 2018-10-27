@@ -4,6 +4,19 @@
 # Округление должно происходить по математическим правилам (0.6 --> 1, 0.4 --> 0).
 # Для решения задачи не используйте встроенные функции и функции из модуля math.
 
+def my_round(a,b):
+    c=a*10**b
+    d=c-int(c)
+    if d>=0.5:
+        c+=1
+    c=int(c)/10**b
+    return c
+
+print('Задача 1')
+res=my_round(13.54637,4)
+print(res)
+
+
 
 # Задание-2:
 # Дан шестизначный номер билета. Определить, является ли билет счастливым.
@@ -11,7 +24,22 @@
 # Билет считается счастливым, если сумма его первых и последних цифр равны.
 # !!!P.S.: функция не должна НИЧЕГО print'ить
 
+def is_happy_ticket(num):
+    s_num=str(num)
+    L=len(s_num)
+    if L!=6:
+        return False
+    s1=s2=0
+    for i in range(L//2):
+        s1+=int(s_num[i])
+        s2+=int(s_num[L-i-1])
+    if s1==s2:
+        return True
+    else:
+        return False
 
-
-
+print('\nЗадача 2')
+ticket_num=223223
+res=is_happy_ticket(ticket_num)
+print('Счастливый ли билет {}: '.format(ticket_num),res)
 
