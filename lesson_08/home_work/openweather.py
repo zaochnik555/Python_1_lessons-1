@@ -123,3 +123,55 @@ OpenWeatherMap — онлайн-сервис, который предостав�
 
 """
 
+import pathlib, os, requests, sqlite3
+
+def GetID(filename):
+    # Чтобы получать данные о погоде необходимо получить APPID. А APPID нужно
+    # поместить в файл на диске. Поэтому проверяем, существует ли он. Если нет - выход
+    try:
+        f = open(filename)
+        s = f.read().splitlines()
+        f.close()
+    except:
+        print('Такого файла с id не существует')
+        exit()
+    return s
+
+def GetGorod():
+    try:
+        s = input('Введите название города по-английски: ')
+    except:
+        print('Без названия города дальнейшая работа не возможна!')
+        exit()
+    return s
+
+my_id=GetID('app.id')
+my_url = 'http://api.openweathermap.org/data/2.5/weather'
+gorod=GetGorod()
+lst1 = {'q': gorod, 'appid': my_id, 'units': 'metric'}
+# Этот запрос далеко не всегда выполняется корректно. Возможно проблема с сайтом
+# или с соединением. Поэтому обертываем его в try except
+try:
+    zapros = requests.get(my_url, params=lst1)
+    dannye = zapros.json()
+    print("В городе {} сейчас температура {} С.".format(dannye["name"], dannye["main"]["temp"]))
+    city_weather = [(dannye["id"], dannye["name"], dannye["dt"], dannye["main"]["temp"], dannye["weather"][0]["id"])]
+except:
+    print('Соединение не удалось выполнить корректно!')
+    exit()
+
+# Проверим, существует ли уже на диске такая БД. Если да - удалить, иначе
+# вылетает при создании заново
+if os.path.isfile('database.db'):
+    os.remove('database.db')
+soedinenie = sqlite3.connect('database.db')
+Kortezh = soedinenie.cursor()
+Kortezh.execute("""CREATE TABLE Weather(id_города INTEGER PRIMARY KEY,
+Город VARCHAR(255), Дата DATE, Температура INTEGER, id_погоды INTEGER)""")
+Kortezh.executemany('INSERT INTO Weather VALUES (?,?,?,?,?)', city_weather)
+soedinenie.commit()
+Kortezh.close()
+soedinenie.close()
+print('Файл database.db создан!')
+
+
